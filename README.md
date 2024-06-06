@@ -1,30 +1,35 @@
-# React + TypeScript + Vite
+# Automated Trader Front-End
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+This is the front-end part of the Automated Trader project. It provides a user interface for managing stock portfolios, viewing real-time data, and visualizing historical performance.
 
-Currently, two official plugins are available:
+## Table of Contents
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+- [Introduction](#introduction)
+- [Features](#features)
+- [Tech Stack](#tech-stack)
+- [Installation](#installation)
+- [Usage](#usage)
+- [Project Structure](#project-structure)
+- [Contributing](#contributing)
+- [License](#license)
 
-## Expanding the ESLint configuration
+## Introduction
 
-If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
+The front-end application for Automated Trader is built using React and TypeScript. It communicates with the back-end via RESTful APIs to provide a seamless trading experience. The application includes features for managing portfolios, buying and selling stocks, and visualizing data with D3.js.
 
-- Configure the top-level `parserOptions` property like this:
+## Features
 
-```js
-export default {
-  // other rules...
-  parserOptions: {
-    ecmaVersion: 'latest',
-    sourceType: 'module',
-    project: ['./tsconfig.json', './tsconfig.node.json'],
-    tsconfigRootDir: __dirname,
-  },
-}
-```
+- Manage stock portfolios
+- Real-time stock data
+- Buy and sell stocks
+- Visualize portfolio performance with interactive charts
+- Responsive design with Tailwind CSS
 
-- Replace `plugin:@typescript-eslint/recommended` to `plugin:@typescript-eslint/recommended-type-checked` or `plugin:@typescript-eslint/strict-type-checked`
-- Optionally add `plugin:@typescript-eslint/stylistic-type-checked`
-- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and add `plugin:react/recommended` & `plugin:react/jsx-runtime` to the `extends` list
+## Tech Stack
+
+- **React**: For building user interfaces
+- **TypeScript**: For type safety and improved code quality
+- **Tailwind CSS**: For styling
+- **D3.js**: For data visualization
+- **Axios**: For making HTTP requests
+- **Vite**: For bundling and development server
