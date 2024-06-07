@@ -1,6 +1,6 @@
 import {useEffect, useState} from "react";
-import {getHistoricalData, getPortfolioValue} from "../services/api.ts";
-const PortfolioOverview = () => {
+import {getBookValue, getHistoricalData, getPortfolioValue} from "../services/api.ts";
+const PortfolioOverview = ({holdings}) => {
 
     type HistoricalData = {
         _id: string;
@@ -12,6 +12,7 @@ const PortfolioOverview = () => {
     const [selectedPeriod, setSelectedPeriod] = useState<string>('5y');
     const [gainsLosses, setGainsLosses] = useState<number | null>(null);
     const [percentGL, setPercentGL] = useState<number | null>(null);
+    const [holdingsData, setHoldingsData] = useState<any[]>([]);
     useEffect(() => {
         const fetchPortfolioData = async () => {
             try {
@@ -34,16 +35,31 @@ const PortfolioOverview = () => {
                     setPercentGL(null);
                 }
 
+                // Fetch book values and calculate all-time returns
+                const updatedHoldings = await Promise.all(holdings.map(async (holding) => {
+                    const bookValue = await getBookValue(holding.ticker);
+                    const allTimeReturn = ((holding.currentPrice - bookValue) / bookValue) * 100;
+                    return {
+                        ...holding,
+                        bookValue,
+                        allTimeReturn: allTimeReturn.toFixed(2) // Format to 2 decimal places
+                    };
+                }));
+
+                setHoldingsData(updatedHoldings);
+
+
+
             } catch (error) {
                 console.error('Error fetching portfolio data:', error);
             }
         };
 
         fetchPortfolioData();
-    }, [selectedPeriod]);
-    const formatValue = (value: number | null) => {
-        return value!== null ? value.toFixed(2) : 'Loading...';
-    }
+    }, [selectedPeriod, holdings]);
+    const formatValue = (value: number | null | undefined) => {
+        return value !== null && value !== undefined ? value.toFixed(2) : 'N/A';
+    };
 
     const handlePeriodChange = (period:string) => {
         setSelectedPeriod(period);
@@ -86,6 +102,32 @@ const PortfolioOverview = () => {
                 <button onClick={() => handlePeriodChange('5y')}
                         className={`period-button ${selectedPeriod === '5y' ? 'selected' : ''}`}> All Time
                 </button>
+            </div>
+            {/* Holdings Section */}
+            <div className = "mt-8">
+                <h2 className="text-3xl font-semibold mb-4">Holdings</h2>
+                <table className="min-w-full bg-transparent  text-left">
+                    <thead>
+                    <tr>
+                        <th className="py-2 px-4 ">Stock</th>
+                        <th className="py-2 px-4 ">Total Value</th>
+                        <th className="py-2 px-4 ">Today's Price</th>
+                        <th className="py-2 px-4 ">All Time Return</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {holdingsData.map((holding) => (
+                        <tr key={holding.ticker} className="hover:bg-gray-500">
+                            <td className="py-2 px-4">{holding.ticker}</td>
+                            <td className="py-2 px-4">${formatValue(holding.totalValue)}</td>
+                            <td className="py-2 px-4">${formatValue(holding.currentPrice)}</td>
+                            <td className="py-2 px-4">{holding.allTimeReturn}%</td>
+                        </tr>
+                    ))}
+                    </tbody>
+
+                </table>
+
             </div>
         </div>
     );

@@ -28,3 +28,14 @@ export const getHistoricalData = async (period: string):Promise<HistoricalData[]
     return response.data;
 };
 
+
+export const getHoldings = async () => {
+    const response = await apiClient.get('/portfolio');
+    console.log("Portfolio holdings fetched. ");
+    return response.data;
+};
+
+export const getBookValue = async (ticker: string) => {
+    const response = await apiClient.get(`/portfolio/bookvalue/${ticker}`);
+    return response.data.bookValue;
+};
