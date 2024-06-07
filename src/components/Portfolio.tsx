@@ -1,11 +1,12 @@
+import PortfolioOverview from "./PortfolioOverview.tsx";
 
 const Portfolio = () => {
     return (
-        <div className="p-4">
-            <h1 className="text-2xl font-bold">Portfolio</h1>
-            <p>Portfolio content goes here...</p>
+        <div className="container mx-auto mt-8">
+            <PortfolioOverview />
         </div>
     );
 }
+
 
 export default Portfolio;

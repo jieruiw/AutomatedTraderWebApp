@@ -12,12 +12,14 @@ export default function App() {
         <Router>
             <div className="App">
                 <Header />
+                <div className="pt-10">
                 <Routes>
                     <Route path="/" element={<Portfolio />} />
                     <Route path="/transactions" element={<Transactions />} />
                     <Route path="/stocks" element={<StockList />} />
                     <Route path="/stocks/:ticker" element={<StockDetails />} />
                 </Routes>
+                </div>
             </div>
         </Router>
     );
