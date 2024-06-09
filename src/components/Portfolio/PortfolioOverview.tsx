@@ -1,24 +1,32 @@
 import {useEffect, useState} from "react";
-import {getBookValue, getHistoricalData, getPortfolioValue} from "../services/api.ts";
-const PortfolioOverview = ({holdings}) => {
+import {getBookValue, getHistoricalData, getPortfolioValue, getLogo} from "../../services/api.ts";
+import PortfolioGraph from "./PortfolioGraph.tsx";
+import {HistoricalData, Holding} from "../types.ts";
 
-    type HistoricalData = {
-        _id: string;
-        date: string;
-        value: number;
-    }
+
+const PortfolioOverview = ({holdings}: {holdings: Holding[]}) => {
+
+
     const [currentValue, setCurrentValue] = useState<number | null>(null);
     const [historicalData, setHistoricalData] = useState<HistoricalData[]>([]);
     const [selectedPeriod, setSelectedPeriod] = useState<string>('5y');
     const [gainsLosses, setGainsLosses] = useState<number | null>(null);
     const [percentGL, setPercentGL] = useState<number | null>(null);
-    const [holdingsData, setHoldingsData] = useState<any[]>([]);
+    const [holdingsData, setHoldingsData] = useState<Holding[]>([]);
+
     useEffect(() => {
         const fetchPortfolioData = async () => {
             try {
                 const value = await getPortfolioValue();
                 setCurrentValue(value);
-                const data: HistoricalData[] = await getHistoricalData(selectedPeriod);
+                const rawData = await getHistoricalData(selectedPeriod);
+
+                // Transform raw data to include date field
+                const data: { date: Date; _id: string; value: number }[] = rawData.map(d => ({
+                    ...d,
+                    date: new Date(d.date)
+                }));
+
                 setHistoricalData(data);
 
                 if (data.length > 0) {
@@ -38,11 +46,14 @@ const PortfolioOverview = ({holdings}) => {
                 // Fetch book values and calculate all-time returns
                 const updatedHoldings = await Promise.all(holdings.map(async (holding) => {
                     const bookValue = await getBookValue(holding.ticker);
-                    const allTimeReturn = ((holding.currentPrice - bookValue) / bookValue) * 100;
+                    const totalValue = holding.stock.price * holding.holdings;
+                    const allTimeReturn = ((holding.stock.price - bookValue) / bookValue) * 100;
+                    const logo = await getLogo(holding.ticker);
                     return {
                         ...holding,
-                        bookValue,
-                        allTimeReturn: allTimeReturn.toFixed(2) // Format to 2 decimal places
+                        totalValue: totalValue,
+                        allTimeReturn: parseFloat(allTimeReturn.toFixed(2)), // Format to 2 decimal places
+                        logo
                     };
                 }));
 
@@ -83,9 +94,8 @@ const PortfolioOverview = ({holdings}) => {
                     (${percentGL !== null ? percentGL : 'Loading...'}%) ${periodMapping[selectedPeriod]}` : 'Loading...'}
                 </p>
             </div>
-            <div className="bg-gray-700 h-[400px] w-[800px] flex items-center justify-center">
-                <p className="text-gray-500">Graph Placeholder</p>
-            </div>
+            <PortfolioGraph data ={historicalData}>
+            </PortfolioGraph>
             <div className="period-selector">
                 <button onClick={() => handlePeriodChange('1w')}
                         className={`period-button ${selectedPeriod === '1w' ? 'selected' : ''}`}> 1 Week
@@ -106,7 +116,8 @@ const PortfolioOverview = ({holdings}) => {
             {/* Holdings Section */}
             <div className = "mt-8">
                 <h2 className="text-3xl font-semibold mb-4">Holdings</h2>
-                <table className="min-w-full bg-transparent  text-left">
+                <table className="min-w-full text-left rounded-3xl"
+                       style={{ backgroundColor: '#262626' }}>
                     <thead>
                     <tr>
                         <th className="py-2 px-4 ">Stock</th>
@@ -118,10 +129,14 @@ const PortfolioOverview = ({holdings}) => {
                     <tbody>
                     {holdingsData.map((holding) => (
                         <tr key={holding.ticker} className="hover:bg-gray-500">
-                            <td className="py-2 px-4">{holding.ticker}</td>
+                            <td className="py-2 px-4 flex items-center">
+                                <img src = {holding.logo} alt={` `} className = "h-6 w-12 object-contain mr-2" />
+                                {holding.ticker}</td>
                             <td className="py-2 px-4">${formatValue(holding.totalValue)}</td>
-                            <td className="py-2 px-4">${formatValue(holding.currentPrice)}</td>
-                            <td className="py-2 px-4">{holding.allTimeReturn}%</td>
+                            <td className="py-2 px-4">${formatValue(holding.stock.price)}</td>
+                            <td className={`py-2 px-4 ${holding.allTimeReturn >= 0 ? 'text-green-500' : 'text-red-500'}`}>
+                                {holding.allTimeReturn >= 0 ? `+${holding.allTimeReturn}` : holding.allTimeReturn}%
+                            </td>
                         </tr>
                     ))}
                     </tbody>

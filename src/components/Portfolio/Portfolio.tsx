@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
-import { getHoldings } from '../services/api';
-import PortfolioOverview from './PortfolioOverview';
+import { getHoldings } from '../../services/api.ts';
+import PortfolioOverview from './PortfolioOverview.tsx';
 
 const Portfolio = () => {
     const [holdings, setHoldings] = useState([]);

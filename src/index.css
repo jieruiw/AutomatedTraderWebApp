@@ -61,7 +61,7 @@ button:focus-visible {
   outline: 4px auto -webkit-focus-ring-color;
 }
 
-@media (prefers-color-scheme: dark) {
+@media (prefers-color-scheme: light) {
   :root {
     color: #213547;
     background-color: #ffffff;
@@ -78,7 +78,7 @@ button:focus-visible {
   display: flex;
   justify-content: center;
   align-items: center;
-  background-color: #333333;
+  background-color: #262626;
   border-radius: 30px;
   padding: 5px;
   margin-top: 20px;
@@ -104,4 +104,14 @@ button:focus-visible {
   background-color: white;
   color: #161616;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+svg {
+  overflow: visible;
+}
+
+/* Make sure the text is not clipped */
+.axis text {
+  font-size: 12px;
+  text-anchor: end;
 }

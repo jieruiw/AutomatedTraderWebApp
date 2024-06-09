@@ -39,3 +39,10 @@ export const getBookValue = async (ticker: string) => {
     const response = await apiClient.get(`/portfolio/bookvalue/${ticker}`);
     return response.data.bookValue;
 };
+
+export const getLogo = async (ticker: string) => {
+    const response = await apiClient.get(`https://api.api-ninjas.com/v1/logo?ticker=${ticker}`, {
+        headers: {'X-Api-Key' : '4Vh53TCr/mDyKVQUMdvEiA==C1bJXQz2wnPkJdTY'}
+    });
+    return response.data[0]?.image;
+};
