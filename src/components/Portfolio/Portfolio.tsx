@@ -19,7 +19,7 @@ const Portfolio = () => {
     }, []);
 
     return (
-        <div className="container mx-auto mt-8">
+        <div className="container mx-auto mt-10">
             <PortfolioOverview holdings={holdings} />
         </div>
     );

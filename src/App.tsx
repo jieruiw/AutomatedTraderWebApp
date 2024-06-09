@@ -1,8 +1,8 @@
 
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Portfolio from './components/Portfolio/Portfolio.tsx';
-import Transactions from './components/Transactions';
-import StockList from './components/StockList';
+import Transactions from './components/Transactions/Transactions.tsx';
+import StockList from './components/StockList/StockList.tsx';
 import StockDetails from './components/StockDetails';
 import Header from './components/Header';
 

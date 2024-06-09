@@ -19,14 +19,11 @@ const PortfolioOverview = ({holdings}: {holdings: Holding[]}) => {
             try {
                 const value = await getPortfolioValue();
                 setCurrentValue(value);
-                const rawData = await getHistoricalData(selectedPeriod);
+                const data = await getHistoricalData(selectedPeriod);
 
-                // Transform raw data to include date field
-                const data: { date: Date; _id: string; value: number }[] = rawData.map(d => ({
-                    ...d,
-                    date: new Date(d.date)
-                }));
 
+                // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                // @ts-expect-error
                 setHistoricalData(data);
 
                 if (data.length > 0) {
@@ -114,7 +111,7 @@ const PortfolioOverview = ({holdings}: {holdings: Holding[]}) => {
                 </button>
             </div>
             {/* Holdings Section */}
-            <div className = "mt-8">
+            <div className = "mt-8 mr-20">
                 <h2 className="text-3xl font-semibold mb-4">Holdings</h2>
                 <table className="min-w-full text-left rounded-3xl"
                        style={{ backgroundColor: '#262626' }}>

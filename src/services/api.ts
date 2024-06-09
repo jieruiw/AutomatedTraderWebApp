@@ -46,3 +46,14 @@ export const getLogo = async (ticker: string) => {
     });
     return response.data[0]?.image;
 };
+
+export const getTransactions = async () => {
+    const response = await apiClient.get(`/portfolio/transactions`);
+    return response.data;
+};
+
+
+export const getStocks = async() => {
+    const response = await apiClient.get(`/stocks`);
+    return response.data;
+}
