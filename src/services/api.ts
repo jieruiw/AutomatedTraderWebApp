@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 const apiClient = axios.create({
-    baseURL: 'http://localhost:3000/api', // Adjust this based on your backend URL
+    baseURL: 'https://trader-backend-9b518120d69e.herokuapp.com/api', // Adjust this based on your backend URL
     headers: {
         'Content-Type': 'application/json',
     },
