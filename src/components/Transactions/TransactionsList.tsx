@@ -6,7 +6,8 @@ const TransactionsList: React.FC<{ filteredTransactions: { [date: string]: Trans
             <div key={date} className="mb-8">
                 <h2 className="text-xl font-semibold mb-2">{date}</h2>
                 {filteredTransactions[date].map((tx) => (
-                    <div key={tx._id} className="flex justify-between items-center mb-2 p-4 bg-gray-800 rounded-lg w-full">
+                    <div key={tx._id} className="flex justify-between items-center mb-2 p-4 rounded-lg w-full"
+                         style={{ backgroundColor: '#262626' }}>
                         <div>
                             <div className="flex items-center">
                                 <img src={logos[tx.ticker]} alt={tx.ticker} className="h-6 w-6 object-contain mr-2" />
