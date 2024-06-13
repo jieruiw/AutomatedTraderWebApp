@@ -19,7 +19,7 @@ const TransactionsPage: React.FC = () => {
                 const uniqueTickers = [...new Set(data.map((tx: { ticker: string; }) => tx.ticker))];
                 const logoData: { [key: string]: string } = {};
                 for (const ticker of uniqueTickers as string[]) {
-                    logoData[ticker] = await getLogo(ticker);
+                    logoData[ticker] = await getLogo(ticker).catch(() => 'data:image/gif;base64,R0lGODlhAQABAIAAAAUEBAAAACwAAAAAAQABAAACAkQBADs=');
                 }
                 setLogos(logoData);
             } catch (error) {

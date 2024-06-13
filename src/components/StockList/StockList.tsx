@@ -10,7 +10,7 @@ const StockList = () => {
             try {
                 const data = await getStocks();
                 const addLogo = await Promise.all(data.map(async (stock: Stock) => {
-                    const logo = await getLogo(stock.ticker);
+                    const logo = await getLogo(stock.ticker).catch(() => 'data:image/gif;base64,R0lGODlhAQABAIAAAAUEBAAAACwAAAAAAQABAAACAkQBADs=');
                     return {
                         ...stock,
                         logo
