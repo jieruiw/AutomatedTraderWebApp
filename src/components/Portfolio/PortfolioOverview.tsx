@@ -45,7 +45,7 @@ const PortfolioOverview = ({holdings}: {holdings: Holding[]}) => {
                     const bookValue = await getBookValue(holding.ticker);
                     const totalValue = holding.stock.price * holding.holdings;
                     const allTimeReturn = ((holding.stock.price - bookValue) / bookValue) * 100;
-                    const logo = await getLogo(holding.ticker);
+                    const logo = await getLogo(holding.ticker).catch(() => 'data:image/gif;base64,R0lGODlhAQABAIAAAAUEBAAAACwAAAAAAQABAAACAkQBADs=');
                     return {
                         ...holding,
                         totalValue: totalValue,
