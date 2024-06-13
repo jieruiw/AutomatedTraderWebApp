@@ -41,10 +41,8 @@ export const getBookValue = async (ticker: string) => {
 };
 
 export const getLogo = async (ticker: string) => {
-    const response = await apiClient.get(`https://api.api-ninjas.com/v1/logo?ticker=${ticker}`, {
-        headers: {'X-Api-Key' : '4Vh53TCr/mDyKVQUMdvEiA==C1bJXQz2wnPkJdTY'}
-    });
-    return response.data[0]?.image;
+    const response = await apiClient.get(`/stocks/logo/${ticker}`);
+    return response.data;
 };
 
 export const getTransactions = async () => {
